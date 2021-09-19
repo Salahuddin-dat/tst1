@@ -23,6 +23,7 @@ class GenerateVideo(object):
     def get_frame(self):
         _, img = self.video.read()
         # face detection
+        img = img.to_ndarray(format="bgr24")
         faces = face_detect.detectMultiScale(img, scaleFactor=1.1, minNeighbors=4)
 
         for (x, y, w, h) in faces:
