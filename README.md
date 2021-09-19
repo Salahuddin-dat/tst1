@@ -1,1 +1,1 @@
-# tst1
+# RT-detection-mag
