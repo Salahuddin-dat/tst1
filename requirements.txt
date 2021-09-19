@@ -1,6 +1,4 @@
 Flask==2.0.1
-ssl
-uuid
 aiohttp
 av
 google-auth==1.35.0
