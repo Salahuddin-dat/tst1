@@ -137,7 +137,7 @@ async def offer(request):
     # log_info("Created for %s", request.remote)
 
     # prepare local media
-    # player = MediaPlayer(os.path.join(ROOT, "demo-instruct.wav"))
+    player = MediaPlayer(os.path.join(ROOT, "demo-instruct.wav"))
     if args.write_audio:
         recorder = MediaRecorder(args.write_audio)
     else:
@@ -161,7 +161,10 @@ async def offer(request):
     def on_track(track):
         # log_info("Track %s received", track.kind)
 
-        if track.kind == "video":
+        if track.kind == "audio":
+            pc.addTrack(player.audio)
+            recorder.addTrack(track)
+        elif track.kind == "video":
             local_video = VideoTransformTrack(
                 track, transform=params["video_transform"]
             )
@@ -194,6 +197,7 @@ async def on_shutdown(app):
     await asyncio.gather(*coros)
     pcs.clear()
 
+
 async def create_app():
     app = web.Application()
     app.on_shutdown.append(on_shutdown)
@@ -212,9 +216,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--host", default="0.0.0.0", help="Host for HTTP server (default: 0.0.0.0)"
     )
-    #parser.add_argument(  # change port salahudddin
-     #   "--port", type=int, default=9090, help="Port for HTTP server (default: 8080)"
-   # )
+    # parser.add_argument(  # change port salahudddin
+    #   "--port", type=int, default=9090, help="Port for HTTP server (default: 8080)"
+    # )
     parser.add_argument("--verbose", "-v", action="count")
     parser.add_argument("--write-audio", help="Write received audio to a file")
     args = parser.parse_args()
@@ -230,9 +234,9 @@ if __name__ == "__main__":
     else:
         ssl_context = None
 
-    #app = web.Application()
-   # app.on_shutdown.append(on_shutdown)
-    #app.router.add_get("/", index)
-   # app.router.add_get("/client.js", javascript)
-   # app.router.add_post("/offer", offer)
-    web.run_app(create_app(), access_log=None, host=args.host,port=8585, ssl_context=ssl_context)
+    # app = web.Application()
+    # app.on_shutdown.append(on_shutdown)
+    # app.router.add_get("/", index)
+    # app.router.add_get("/client.js", javascript)
+    # app.router.add_post("/offer", offer)
+    web.run_app(create_app(), access_log=None, host=args.host, port=8585, ssl_context=ssl_context)
