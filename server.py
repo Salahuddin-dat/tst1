@@ -131,10 +131,10 @@ async def offer(request):
     pc_id = "PeerConnection(%s)" % uuid.uuid4()
     pcs.add(pc)
 
-    # def log_info(msg, *args):
-    #  logger.info(pc_id + " " + msg, *args)
+    def log_info(msg, *args):
+        logger.info(pc_id + " " + msg, *args)
 
-    # log_info("Created for %s", request.remote)
+        log_info("Created for %s", request.remote)
 
     # prepare local media
     player = MediaPlayer(os.path.join(ROOT, "demo-instruct.wav"))
