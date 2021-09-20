@@ -194,6 +194,14 @@ async def on_shutdown(app):
     await asyncio.gather(*coros)
     pcs.clear()
 
+async def create_app():
+    app = web.Application()
+    app.on_shutdown.append(on_shutdown)
+    app.router.add_get("/", index)
+    app.router.add_get("/client.js", javascript)
+    app.router.add_post("/offer", offer)
+    return app
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -222,11 +230,9 @@ if __name__ == "__main__":
     else:
         ssl_context = None
 
-    app = web.Application()
-    app.on_shutdown.append(on_shutdown)
-    app.router.add_get("/", index)
-    app.router.add_get("/client.js", javascript)
-    app.router.add_post("/offer", offer)
-    #web.run_app(
-     #   app, access_log=None, host=args.host,port=8585, ssl_context=ssl_context
-   # )
+    #app = web.Application()
+   # app.on_shutdown.append(on_shutdown)
+    #app.router.add_get("/", index)
+   # app.router.add_get("/client.js", javascript)
+   # app.router.add_post("/offer", offer)
+    web.run_app(create_app(), access_log=None, host=args.host,port=8585, ssl_context=ssl_context)

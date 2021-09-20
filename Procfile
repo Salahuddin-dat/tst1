@@ -1,3 +1,3 @@
-web: gunicorn server:app
+web: gunicorn --bind 0.0.0.0:$PORT -k aiohttp.worker.GunicornWebWorker server:create_app
 
 
